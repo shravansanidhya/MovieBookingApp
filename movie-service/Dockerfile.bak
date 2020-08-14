@@ -1,0 +1,4 @@
+FROM openjdk:8
+EXPOSE 808
+ADD ./target/MovieService.jar MovieService.jar
+ENTRYPOINT java -jar MovieService.jar

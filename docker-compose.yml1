@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+ booking-service:
+  container_name: booking-service
+  build: 
+   context: "./booking-service"   
+   dockerfile: "Dockerfile"
+  ports: 
+   - 8083:8083
+  depends_on:
+   - db
+  networks:
+   - bms
+
+ movie-service:
+  container_name: movie-service
+  build:
+   context: "./movie-service"
+   dockerfile: "Dockerfile"
+  ports:
+    - 8082:8082
+  depends_on:
+   - db
+  networks:
+   - bms
+
+ user-service:
+  container_name: user-service
+  build:
+   context: "./user-service"
+   dockerfile: "Dockerfile"
+  ports:
+   - 8081:8081
+  depends_on:
+   - db
+  networks:
+   - bms
+ 
+ db:
+  image: mysql:5.7
+  container_name: bms-db
+  ports:
+   - 3306:3306
+  restart: always
+  environment:
+     MYSQL_USER: root
+     MYSQL_PASSWORD: root123
+     MYSQL_ROOT_PASSWORD: root123
+  networks:
+   - bms
+  volumes:
+   - db-data:/var/lib/mysql
+
+volumes:
+ db-data:
+
+networks:
+ bms:
+  external:
+   name: host
